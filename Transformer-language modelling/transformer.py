@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# defalut hyperparameters
+# hyperparameters
 BATCH_SIZE = 64
 CONTEXT_LENGTH = 256
 EMBEDDING_SIZE = 384
