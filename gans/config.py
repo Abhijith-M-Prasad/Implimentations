@@ -2,10 +2,10 @@
 import torch
 
 
-path = "D:\Github\Dataset"
+path = "path-to-dataset"
 
 
-# Hyperparameters
+# Hyperparameters (need to be tuned)
 batch_size = 64
 epochs = 1000
 latent_dim = 100
