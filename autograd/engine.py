@@ -376,7 +376,6 @@ class Tensor:
         """
         return self.data.size
 
-
 #--------------------------------------------------------------------------------------------------------
 # Random
 
@@ -674,6 +673,51 @@ def max(tensor, axis=None):
 
     out._backward = _backward
             
+    return out
+
+#--------------------------------------------------------------------------------------------------------
+# non-linear activation functions
+def sigmoid(tensor):
+    out = 1 / (1 + exp(-tensor))
+    out._children = {tensor}
+    def _backward(gradient=None):
+        """ 
+        A function that performs backward propagation to compute gradients.
+        """
+        gradient = out.grad if gradient is None else gradient
+        tensor.grad.data += gradient.data * out.data * (1 - out.data)
+    
+    out._backward = _backward
+    return out
+
+def relu(tensor):
+    out = np.maximum(0, tensor.data)
+    out = Tensor(out)
+    out._children = {tensor}
+
+    def _backward(gradient=None):
+        """
+        A function that performs backward propagation to compute gradients.
+        """
+        gradient = out.grad if gradient is None else gradient
+        tensor.grad.data += gradient.data * (tensor.data > 0)
+
+    out._backward = _backward
+    return out
+
+def tanh(tensor):
+    out = np.tanh(tensor.data)
+    out = Tensor(out)
+    out._children = {tensor}
+
+    def _backward(gradient=None):
+        """
+        A function that performs backward propagation to compute gradients.
+        """
+        gradient = out.grad if gradient is None else gradient
+        tensor.grad.data += gradient.data * (1 - out.data**2)
+
+    out._backward = _backward
     return out
 
 #--------------------------------------------------------------------------------------------------------
