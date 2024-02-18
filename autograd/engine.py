@@ -678,17 +678,23 @@ def max(tensor, axis=None):
 #--------------------------------------------------------------------------------------------------------
 # non-linear activation functions
 def sigmoid(tensor):
-    out = 1 / (1 + exp(-tensor))
-    out._children = {tensor}
-    def _backward(gradient=None):
-        """ 
-        A function that performs backward propagation to compute gradients.
-        """
-        gradient = out.grad if gradient is None else gradient
-        tensor.grad.data += gradient.data * out.data * (1 - out.data)
+    out = Tensor(1) / (1 + exp(-tensor))
+    #out._children = {tensor}
+    #def _backward(gradient=None):
+    #    """ 
+    #   A function that performs backward propagation to compute gradients.
+    #    """
+        #gradient = out.grad if gradient is None else gradient
+        #tensor.grad.data += gradient.data * out.data * (1 - out.data)
     
-    out._backward = _backward
+    #out._backward = _backward
     return out
+
+def softmax(tensor, axis):
+
+    out = exp(tensor) / sum(exp(tensor), axis=axis)
+    return out
+    
 
 def relu(tensor):
     out = np.maximum(0, tensor.data)
