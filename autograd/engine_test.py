@@ -493,6 +493,107 @@ def main():
         errors += 1
         print("\t\033[1;31;40mFailed\033[0m to max along axis ")
 
+    # test sigmoid
+    try:
+        x1 = e.random.randn(3, 3)
+        y1 = torch.tensor(x1.data, requires_grad=True)
+        x2 = e.sigmoid(x1)
+        y2 = torch.sigmoid(y1)
+        t1 = e.allclose(x2, y2.detach().numpy())
+        x2.grad = e.ones_like(x2)
+        x2.backward()
+        y2.backward(torch.ones_like(y2))
+        t2 = e.allclose(x1.grad, y1.grad.numpy())
+        if t1:
+            print("\t\033[1;32;40mpassed\033[0m test for sigmoid ")
+        if t2:
+            print("\t\033[1;32;40mpassed\033[0m backpropogation for sigmoid ")
+        if not t1:
+            errors += 1
+            print("\t\033[1;31;40mFailed\033[0m to sigmoid \n x2=", x2, "\n y2=", y2)
+        if not t2:
+            errors += 1
+            print("\t\033[1;31;40mFailed\033[0m to backpropogate sigmoid \n x1.grad=", x1.grad, "\n y1.grad.numpy()=", e.Tensor(y1.grad.numpy()))
+    except:
+        errors += 1
+        print("\t\033[1;31;40mFailed\033[0m to sigmoid ")
+    
+    # test softmax along axis
+    try:
+        x1 = e.random.randn(3, 3)
+        y1 = torch.tensor(x1.data, requires_grad=True)
+        x2 = e.softmax(x1, axis=0)
+        y2 = torch.softmax(y1, dim=0)
+        t1 = e.allclose(x2, y2.detach().numpy())
+        x2.grad = e.ones_like(x2)
+        x2.backward()
+        y2.backward(torch.ones_like(y2))
+        t2 = e.allclose(x1.grad, y1.grad.numpy())
+        if t1:
+            print("\t\033[1;32;40mpassed\033[0m test for softmax ")
+        if t2:
+            print("\t\033[1;32;40mpassed\033[0m backpropogation for softmax ")
+        if not t1:
+            errors += 1
+            print("\t\033[1;31;40mFailed\033[0m to softmax \n x2=", x2, "\n y2=", y2)
+        if not t2:
+            errors += 1
+            print("\t\033[1;31;40mFailed\033[0m to backpropogate softmax \n x1.grad=", x1.grad, "\n y1.grad.numpy()=", e.Tensor(y1.grad.numpy()))
+    except:
+        errors += 1
+        print("\t\033[1;31;40mFailed\033[0m to softmax ")
+
+
+    # test tanh
+    try:
+        x1 = e.random.randn(3, 3)
+        y1 = torch.tensor(x1.data, requires_grad=True)
+        x2 = e.tanh(x1)
+        y2 = torch.tanh(y1)
+        t1 = e.allclose(x2, y2.detach().numpy())
+        x2.grad = e.ones_like(x2)
+        x2.backward()
+        y2.backward(torch.ones_like(y2))
+        t2 = e.allclose(x1.grad, y1.grad.numpy())
+        if t1:
+            print("\t\033[1;32;40mpassed\033[0m test for tanh ")
+        if t2:
+            print("\t\033[1;32;40mpassed\033[0m backpropogation for tanh ")
+        if not t1:
+            errors += 1
+            print("\t\033[1;31;40mFailed\033[0m to tanh \n x2=", x2, "\n y2=", y2)
+        if not t2:
+            errors += 1
+            print("\t\033[1;31;40mFailed\033[0m to backpropogate tanh \n x1.grad=", x1.grad, "\n y1.grad.numpy()=", e.Tensor(y1.grad.numpy()))
+    except:
+        errors += 1
+        print("\t\033[1;31;40mFailed\033[0m to tanh ")
+
+    # test relu
+    try:
+        x1 = e.random.randn(3, 3)
+        y1 = torch.tensor(x1.data, requires_grad=True)
+        x2 = e.relu(x1)
+        y2 = torch.relu(y1)
+        t1 = e.allclose(x2, y2.detach().numpy())
+        x2.grad = e.ones_like(x2)
+        x2.backward()
+        y2.backward(torch.ones_like(y2))
+        t2 = e.allclose(x1.grad, y1.grad.numpy())
+        if t1:
+            print("\t\033[1;32;40mpassed\033[0m test for relu ")
+        if t2:
+            print("\t\033[1;32;40mpassed\033[0m backpropogation for relu ")
+        if not t1:
+            errors += 1
+            print("\t\033[1;31;40mFailed\033[0m to relu \n x2=", x2, "\n y2=", y2)
+        if not t2:
+            errors += 1
+            print("\t\033[1;31;40mFailed\033[0m to backpropogate relu \n x1.grad=", x1.grad, "\n y1.grad.numpy()=", e.Tensor(y1.grad.numpy()))
+    except:
+        errors += 1
+        print("\t\033[1;31;40mFailed\033[0m to relu ")
+
     # test backward in engine vs torch
     try:
         x1 = e.random.randn(3, 4)
@@ -518,7 +619,6 @@ def main():
     except:
         errors += 1
         print("\t\033[1;31;40mFailed\033[0m to backward in engine vs torch ")
-        
 
     if errors == 0:
         st = "\t\033[1;32;40mTest completed successfully with no errors\033[0m "
